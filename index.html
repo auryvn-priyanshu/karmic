@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DIVYA-DATA | AI Karmic Pattern Analyzer</title>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --blush-pink: #FCE7F3;
+            --soft-lilac: #EDE9FE;
+            --sky-blue: #E0F2FE;
+            --cream-white: #FFFBFA;
+            --text-dark: #334155;
+            --accent-pink: #f472b6;
+            --accent-purple: #a78bfa;
+            --gradient-primary: linear-gradient(135deg, #FCE7F3 0%, #EDE9FE 50%, #E0F2FE 100%);
+            --glass-bg: rgba(255, 255, 255, 0.45);
+            --glass-border: rgba(255, 255, 255, 0.6);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background: var(--cream-white);
+            color: var(--text-dark);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* --- Background Elements --- */
+        .background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: var(--gradient-primary);
+            overflow: hidden;
+        }
+
+        .glow-sphere {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.6;
+            animation: float 20s infinite alternate ease-in-out;
+        }
+
+        .sphere-1 { width: 400px; height: 400px; background: var(--blush-pink); top: -100px; left: -100px; }
+        .sphere-2 { width: 500px; height: 500px; background: var(--soft-lilac); bottom: -150px; right: -100px; animation-delay: -5s; }
+        .sphere-3 { width: 300px; height: 300px; background: var(--sky-blue); top: 40%; left: 60%; animation-delay: -10s; }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(50px, 100px) scale(1.2); }
+        }
+
+        .particle {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0.5;
+            animation: rise 15s linear infinite;
+        }
+
+        @keyframes rise {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            50% { opacity: 0.8; }
+            100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+        }
+
+        /* --- Layout --- */
+        header {
+            padding: 2rem;
+            text-align: center;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .logo {
+            font-weight: 800;
+            letter-spacing: 0.2rem;
+            font-size: 1.2rem;
+            color: var(--accent-purple);
+            text-transform: uppercase;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 1rem;
+            min-height: 100vh;
+        }
+
+        /* --- Components --- */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .hero-section {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #ec4899, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #64748b;
+            margin-bottom: 2rem;
+        }
+
+        /* --- Forms --- */
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #475569;
+            padding-left: 0.5rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.5);
+            font-size: 1rem;
+            color: var(--text-dark);
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        input:focus {
+            background: white;
+            border-color: var(--accent-purple);
+            box-shadow: 0 0 0 4px rgba(167, 139, 250, 0.1);
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 1.2rem;
+            border: none;
+            border-radius: 14px;
+            background: linear-gradient(to right, #f472b6, #a78bfa);
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 15px -3px rgba(244, 114, 182, 0.3);
+            margin-top: 1rem;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 20px -3px rgba(244, 114, 182, 0.4);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        /* --- Analysis Loading --- */
+        #loading-overlay {
+            display: none;
+            text-align: center;
+            padding: 3rem;
+        }
+
+        .loader-circle {
+            width: 60px;
+            height: 60px;
+            border: 5px solid var(--blush-pink);
+            border-top: 5px solid var(--accent-purple);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1.5rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* --- Report Sections --- */
+        #report-container {
+            display: none;
+        }
+
+        .report-step {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+            margin-bottom: 4rem;
+        }
+
+        .report-step.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .karmic-badge {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            background: white;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--accent-purple);
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .chart-container {
+            margin: 2rem 0;
+            height: 300px;
+            position: relative;
+        }
+
+        .insight-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        @media (max-width: 600px) {
+            .insight-grid { grid-template-columns: 1fr; }
+            h1 { font-size: 1.8rem; }
+        }
+
+        .insight-item {
+            background: rgba(255, 255, 255, 0.4);
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .insight-title {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--accent-pink);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        /* --- Animations --- */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 3rem;
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+
+        .back-to-top {
+            color: var(--accent-purple);
+            text-decoration: none;
+            font-weight: 700;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="background-container" id="bg-container">
+        <div class="glow-sphere sphere-1"></div>
+        <div class="glow-sphere sphere-2"></div>
+        <div class="glow-sphere sphere-3"></div>
+    </div>
+
+    <header>
+        <div class="logo">Divya-Data</div>
+    </header>
+
+    <main>
+        <!-- Hero & Input -->
+        <section id="input-section">
+            <div class="hero-section">
+                <h1>AI Karmic Pattern Analyzer</h1>
+                <p class="subtitle">Decode your soul's blueprint and break cycles through celestial data analysis.</p>
+            </div>
+
+            <div class="glass-card">
+                <form id="karmic-form">
+                    <div class="form-group">
+                        <label>FULL NAME</label>
+                        <input type="text" id="user-name" placeholder="E.g. Selene Woods" required>
+                    </div>
+                    <div class="form-group">
+                        <label>BIRTH DATE</label>
+                        <input type="date" id="birth-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label>BIRTH TIME (Approximate)</label>
+                        <input type="time" id="birth-time" value="12:00">
+                    </div>
+                    <div class="form-group">
+                        <label>PLACE OF BIRTH</label>
+                        <input type="text" id="birth-place" placeholder="City, Country" required>
+                    </div>
+                    <button type="submit" class="btn-primary">ACTIVATE KARMIC SCAN</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Loading State -->
+        <section id="loading-overlay">
+            <div class="loader-circle"></div>
+            <h3>Mapping Your Past Incarnations...</h3>
+            <p class="subtitle" id="loading-text">Synchronizing Saturnian cycles...</p>
+        </section>
+
+        <!-- Result/Report Container -->
+        <section id="report-container">
+            <!-- Step 1: The Core Debt -->
+            <div class="report-step glass-card" id="step-1">
+                <span class="karmic-badge">SOUL ORIGIN</span>
+                <h2>South Node Influence</h2>
+                <p id="south-node-text" style="margin: 1rem 0; font-size: 1.1rem;"></p>
+                <div class="insight-item">
+                    <div class="insight-title">Your Master Habit</div>
+                    <p id="master-habit">Calculating your subconscious comfort zone...</p>
+                </div>
+            </div>
+
+            <!-- Step 2: Hidden Patterns -->
+            <div class="report-step glass-card" id="step-2">
+                <span class="karmic-badge">12TH HOUSE SHADOW</span>
+                <h2>Subconscious Programming</h2>
+                <div class="chart-container">
+                    <canvas id="balance-chart"></canvas>
+                </div>
+                <p id="house-12-text"></p>
+            </div>
+
+            <!-- Step 3: The Saturnian Weight -->
+            <div class="report-step glass-card" id="step-3">
+                <span class="karmic-badge">SATURN'S DISCIPLINE</span>
+                <h2>Life Lesson Focus</h2>
+                <p id="saturn-lesson" style="font-style: italic; color: #64748b; font-size: 1.2rem; margin-bottom: 2rem;"></p>
+                <div class="insight-grid">
+                    <div class="insight-item">
+                        <div class="insight-title">The Challenge</div>
+                        <p id="saturn-challenge">...</p>
+                    </div>
+                    <div class="insight-item">
+                        <div class="insight-title">The Reward</div>
+                        <p id="saturn-reward">...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4: Relationship Karma -->
+            <div class="report-step glass-card" id="step-4">
+                <span class="karmic-badge">RECURRING CYCLES</span>
+                <h2>Emotional & Relationship Karma</h2>
+                <div class="insight-item" style="border-left: 4px solid var(--accent-pink);">
+                    <p id="relationship-text">Scanning emotional attraction patterns based on Venus-Pluto resonance...</p>
+                </div>
+            </div>
+
+            <!-- Step 5: Growth Phase -->
+            <div class="report-step glass-card" id="step-5" style="text-align: center; background: linear-gradient(180deg, rgba(255,255,255,0.6) 0%, rgba(224, 242, 254, 0.6) 100%);">
+                <span class="karmic-badge">SPIRITUAL ASCENSION</span>
+                <h2>Current Growth Phase</h2>
+                <div style="font-size: 4rem; margin: 1rem 0;">✨</div>
+                <h3 id="growth-title" style="color: var(--accent-purple); margin-bottom: 1rem;">The Integration</h3>
+                <p id="growth-description"></p>
+                <button class="btn-primary" style="max-width: 250px;" onclick="window.location.reload()">RE-SCAN ANOTHER SOUL</button>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 DIVYA-DATA. All insights generated via Cosmic Data Synthesis.</p>
+        <p style="margin-top: 0.5rem;"><span class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">Ascend to Top</span></p>
+    </footer>
+
+    <script>
+        // --- Particle Generation ---
+        const bgContainer = document.getElementById('bg-container');
+        for (let i = 0; i < 30; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.width = Math.random() * 5 + 'px';
+            particle.style.height = particle.style.width;
+            particle.style.left = Math.random() * 100 + 'vw';
+            particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            particle.style.animationDelay = (Math.random() * 10) + 's';
+            bgContainer.appendChild(particle);
+        }
+
+        // --- Data & Logic ---
+        const KARMIC_DATA = {
+            nodes: [
+                { sign: "Aries/Libra", text: "Your soul is learning to balance independence with partnership. In past lives, you gave too much of yourself away.", habit: "Over-compromising to avoid conflict." },
+                { sign: "Taurus/Scorpio", text: "You are shifting from material security to spiritual depth. You are learning that loss is just a transformation.", habit: "Hoarding resources or emotional safety." },
+                { sign: "Gemini/Sagittarius", text: "Focusing on facts rather than just broad theories. Your karma involves honest communication.", habit: "Restlessness and skipping details." },
+                { sign: "Cancer/Capricorn", text: "Learning to balance professional ambition with emotional vulnerability. You've been the 'cold provider' before.", habit: "Hiding emotions behind status." },
+                { sign: "Leo/Aquarius", text: "Moving from being just a face in the crowd to owning your unique creative power.", habit: "Seeking detached validation." },
+                { sign: "Virgo/Pisces", text: "Bringing order to chaos. Your soul is learning to be grounded while maintaining empathy.", habit: "Escapism and lack of boundaries." }
+            ],
+            saturn: [
+                { house: "Identity", lesson: "The Karma of Self-Worth", challenge: "Feeling invisible or restricted by physical appearance.", reward: "Incredible self-mastery and resilience." },
+                { house: "Abundance", lesson: "The Karma of Value", challenge: "Financial fluctuations that force you to find internal value.", reward: "Total financial independence and wisdom." },
+                { house: "Connection", lesson: "The Karma of Expression", challenge: "Feeling misunderstood by siblings or peers.", reward: "Becoming a powerful, authoritative voice." },
+                { house: "Roots", lesson: "The Karma of Belonging", challenge: "Heaviness in the family line or home life.", reward: "Creating a sanctuary that heals generations." },
+                { house: "Creativity", lesson: "The Karma of Joy", challenge: "Difficulty in expressing playfulness or child-like wonder.", reward: "Legendary creative discipline and legacy." }
+            ],
+            growth: [
+                { phase: "The Shedding", desc: "You are currently in a cycle of releasing old versions of yourself. It feels like loss, but it is actually clearing space." },
+                { phase: "The Incubation", desc: "A quiet time. Your patterns are visible but not yet broken. Patience is your primary spiritual tool right now." },
+                { phase: "The Integration", desc: "You are successfully combining your past-life skills with your current purpose. Expect rapid manifestation." }
+            ]
+        };
+
+        const form = document.getElementById('karmic-form');
+        const loadingOverlay = document.getElementById('loading-overlay');
+        const reportContainer = document.getElementById('report-container');
+        const loadingText = document.getElementById('loading-text');
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            startAnalysis();
+        });
+
+        async function startAnalysis() {
+            // UI Transition
+            document.getElementById('input-section').style.display = 'none';
+            loadingOverlay.style.display = 'block';
+
+            const phrases = [
+                "Synchronizing Saturnian cycles...",
+                "Scanning 12th House resonances...",
+                "Calculating South Node trajectories...",
+                "Unveiling Akashic records..."
+            ];
+
+            let i = 0;
+            const interval = setInterval(() => {
+                loadingText.innerText = phrases[i % phrases.length];
+                i++;
+            }, 800);
+
+            // Mock processing time
+            await new Promise(r => setTimeout(r, 3500));
+            clearInterval(interval);
+            
+            generateReport();
+        }
+
+        function generateReport() {
+            const birthDate = new Date(document.getElementById('birth-date').value);
+            const seed = birthDate.getDate() + birthDate.getMonth();
+            
+            // Deterministic selection based on birth date
+            const node = KARMIC_DATA.nodes[seed % KARMIC_DATA.nodes.length];
+            const saturn = KARMIC_DATA.saturn[seed % KARMIC_DATA.saturn.length];
+            const growth = KARMIC_DATA.growth[seed % KARMIC_DATA.growth.length];
+
+            // Fill Data
+            document.getElementById('south-node-text').innerText = node.text;
+            document.getElementById('master-habit').innerText = node.habit;
+            document.getElementById('saturn-lesson').innerText = `"${saturn.lesson}"`;
+            document.getElementById('saturn-challenge').innerText = saturn.challenge;
+            document.getElementById('saturn-reward').innerText = saturn.reward;
+            document.getElementById('growth-title').innerText = growth.phase;
+            document.getElementById('growth-description').innerText = growth.desc;
+            
+            // House 12 logic
+            const houses = ["Solitude", "Dreams", "Secrets", "Healing", "Ancestry"];
+            const houseVal = houses[seed % houses.length];
+            document.getElementById('house-12-text').innerText = `Your 12th house emphasizes ${houseVal}. Your subconscious is currently processing hidden fears regarding ${houseVal.toLowerCase()}, a pattern rooted at least three generations back.`;
+
+            // Relationship Karma
+            const relPatterns = [
+                "You attract 'Mirror Souls' who reflect your own insecurities until you learn to love yourself.",
+                "Your karma involves 'The Teacher'—partners who challenge your boundaries to make you stronger.",
+                "You are breaking a family cycle of emotional unavailability by learning radical honesty.",
+                "Your soul seeks 'Karmic Debtors'—people you feel you owe, even when you don't. Learn to balance the scales."
+            ];
+            document.getElementById('relationship-text').innerText = relPatterns[seed % relPatterns.length];
+
+            // Show Report
+            loadingOverlay.style.display = 'none';
+            reportContainer.style.display = 'block';
+
+            // Init Chart
+            initChart(seed);
+
+            // Scroll animations
+            observeSteps();
+        }
+
+        function initChart(seed) {
+            const ctx = document.getElementById('balance-chart').getContext('2d');
+            const data = {
+                labels: ['Fire (Will)', 'Earth (Body)', 'Air (Mind)', 'Water (Emotion)', 'Spirit (Soul)'],
+                datasets: [{
+                    label: 'Elemental Imbalance',
+                    data: [
+                        (seed * 7) % 100, 
+                        (seed * 3) % 100, 
+                        (seed * 9) % 100, 
+                        (seed * 2) % 100, 
+                        85
+                    ],
+                    backgroundColor: 'rgba(167, 139, 250, 0.2)',
+                    borderColor: 'rgba(167, 139, 250, 1)',
+                    pointBackgroundColor: 'rgba(244, 114, 182, 1)',
+                    borderWidth: 2
+                }]
+            };
+
+            new Chart(ctx, {
+                type: 'radar',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: { display: false },
+                            grid: { color: 'rgba(0,0,0,0.05)' }
+                        }
+                    },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+
+        function observeSteps() {
+            const observerOptions = {
+                threshold: 0.2
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.report-step').forEach(step => {
+                observer.observe(step);
+            });
+        }
+    </script>
+</body>
+</html>
