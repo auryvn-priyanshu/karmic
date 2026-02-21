@@ -3,585 +3,433 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DIVYA-DATA | AI Karmic Pattern Analyzer</title>
+    <title>DIVYA-DATA | Advanced Vedic Akashic Analyzer</title>
     <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Noto+Serif+Devanagari:wght@400;700&family=Quicksand:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --blush-pink: #FCE7F3;
             --soft-lilac: #EDE9FE;
             --sky-blue: #E0F2FE;
+            --gold: #D4AF37;
+            --deep-purple: #4C1D95;
             --cream-white: #FFFBFA;
-            --text-dark: #334155;
+            --text-dark: #1E293B;
             --accent-pink: #f472b6;
             --accent-purple: #a78bfa;
-            --gradient-primary: linear-gradient(135deg, #FCE7F3 0%, #EDE9FE 50%, #E0F2FE 100%);
-            --glass-bg: rgba(255, 255, 255, 0.45);
-            --glass-border: rgba(255, 255, 255, 0.6);
+            --glass-bg: rgba(255, 255, 255, 0.75);
+            --glass-border: rgba(212, 175, 55, 0.4);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             background: var(--cream-white);
             color: var(--text-dark);
+            font-family: 'Quicksand', sans-serif;
             overflow-x: hidden;
-            line-height: 1.6;
+            line-height: 1.8;
         }
 
-        /* --- Background Elements --- */
-        .background-container {
+        h1, h2, h3, .sanskrit { font-family: 'Cinzel', serif; letter-spacing: 0.15rem; }
+        .devanagari { font-family: 'Noto Serif Devanagari', serif; font-weight: 700; color: var(--gold); }
+
+        /* --- Background Animation --- */
+        .cosmic-void {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
-            background: var(--gradient-primary);
+            background: linear-gradient(180deg, #FDF2F8 0%, #F5F3FF 40%, #EFF6FF 100%);
             overflow: hidden;
         }
 
-        .glow-sphere {
+        .mandala-bg {
             position: absolute;
+            width: 1000px; height: 1000px;
+            border: 1px solid rgba(212, 175, 55, 0.15);
             border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.6;
-            animation: float 20s infinite alternate ease-in-out;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            animation: rotateMandala 180s linear infinite;
         }
 
-        .sphere-1 { width: 400px; height: 400px; background: var(--blush-pink); top: -100px; left: -100px; }
-        .sphere-2 { width: 500px; height: 500px; background: var(--soft-lilac); bottom: -150px; right: -100px; animation-delay: -5s; }
-        .sphere-3 { width: 300px; height: 300px; background: var(--sky-blue); top: 40%; left: 60%; animation-delay: -10s; }
-
-        @keyframes float {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(50px, 100px) scale(1.2); }
-        }
-
-        .particle {
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-            pointer-events: none;
-            opacity: 0.5;
-            animation: rise 15s linear infinite;
-        }
-
-        @keyframes rise {
-            0% { transform: translateY(100vh) scale(0); opacity: 0; }
-            50% { opacity: 0.8; }
-            100% { transform: translateY(-10vh) scale(1); opacity: 0; }
-        }
-
-        /* --- Layout --- */
-        header {
-            padding: 2rem;
-            text-align: center;
-            animation: fadeInDown 1s ease-out;
-        }
-
-        .logo {
-            font-weight: 800;
-            letter-spacing: 0.2rem;
-            font-size: 1.2rem;
-            color: var(--accent-purple);
-            text-transform: uppercase;
-        }
-
-        main {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 1rem;
-            min-height: 100vh;
+        @keyframes rotateMandala {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
         }
 
         /* --- Components --- */
+        header { padding: 3rem 1rem; text-align: center; }
+        .logo-main { font-size: 1.8rem; font-weight: 900; color: var(--deep-purple); border-bottom: 3px solid var(--gold); }
+        
+        main { max-width: 1000px; margin: 0 auto; padding: 1rem; position: relative; }
+
         .glass-card {
             background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 2.5rem;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
-            margin-bottom: 2rem;
-            transition: transform 0.3s ease;
-        }
-
-        .hero-section {
-            text-align: center;
+            border-radius: 40px;
+            padding: 3.5rem;
+            box-shadow: 0 30px 60px rgba(76, 29, 149, 0.1);
             margin-bottom: 4rem;
+            animation: fadeInUp 1s ease-out;
         }
 
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(to right, #ec4899, #8b5cf6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 800;
-        }
-
-        .subtitle {
-            font-size: 1.1rem;
-            color: #64748b;
-            margin-bottom: 2rem;
-        }
-
-        /* --- Forms --- */
-        .form-group {
-            margin-bottom: 1.5rem;
-            text-align: left;
-        }
-
-        label {
-            display: block;
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: #475569;
-            padding-left: 0.5rem;
-        }
-
-        input {
-            width: 100%;
-            padding: 1rem;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            background: rgba(255, 255, 255, 0.5);
-            font-size: 1rem;
-            color: var(--text-dark);
-            transition: all 0.3s ease;
-            outline: none;
-        }
-
-        input:focus {
-            background: white;
-            border-color: var(--accent-purple);
-            box-shadow: 0 0 0 4px rgba(167, 139, 250, 0.1);
-        }
-
-        .btn-primary {
-            width: 100%;
-            padding: 1.2rem;
-            border: none;
-            border-radius: 14px;
-            background: linear-gradient(to right, #f472b6, #a78bfa);
-            color: white;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 15px -3px rgba(244, 114, 182, 0.3);
-            margin-top: 1rem;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 20px -3px rgba(244, 114, 182, 0.4);
-        }
-
-        .btn-primary:active {
-            transform: translateY(0);
-        }
-
-        /* --- Analysis Loading --- */
-        #loading-overlay {
-            display: none;
-            text-align: center;
-            padding: 3rem;
-        }
-
-        .loader-circle {
-            width: 60px;
-            height: 60px;
-            border: 5px solid var(--blush-pink);
-            border-top: 5px solid var(--accent-purple);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 1.5rem;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* --- Report Sections --- */
-        #report-container {
-            display: none;
-        }
-
-        .report-step {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s ease;
-            margin-bottom: 4rem;
-        }
-
-        .report-step.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .karmic-badge {
-            display: inline-block;
-            padding: 0.5rem 1.2rem;
-            background: white;
-            border-radius: 50px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: var(--accent-purple);
-            margin-bottom: 1rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        }
-
-        .chart-container {
-            margin: 2rem 0;
-            height: 300px;
-            position: relative;
-        }
-
-        .insight-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-
-        @media (max-width: 600px) {
-            .insight-grid { grid-template-columns: 1fr; }
-            h1 { font-size: 1.8rem; }
-        }
-
-        .insight-item {
-            background: rgba(255, 255, 255, 0.4);
-            padding: 1.5rem;
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.5);
-        }
-
-        .insight-title {
-            font-weight: 700;
-            font-size: 0.9rem;
-            color: var(--accent-pink);
-            margin-bottom: 0.5rem;
-            text-transform: uppercase;
-        }
-
-        /* --- Animations --- */
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 3rem;
-            font-size: 0.8rem;
-            color: #94a3b8;
+        .btn-cta {
+            width: 100%; background: linear-gradient(135deg, #f472b6, #a78bfa);
+            color: white; border: none; padding: 1.4rem; border-radius: 20px;
+            font-family: 'Cinzel', serif; font-weight: 700; font-size: 1.2rem;
+            cursor: pointer; margin-top: 2rem; transition: 0.3s;
+            box-shadow: 0 15px 30px rgba(244, 114, 182, 0.3);
         }
 
-        .back-to-top {
-            color: var(--accent-purple);
-            text-decoration: none;
-            font-weight: 700;
-            cursor: pointer;
+        .btn-cta:hover { transform: translateY(-3px); box-shadow: 0 20px 40px rgba(244, 114, 182, 0.5); }
+
+        /* --- Report Styles --- */
+        #report { display: none; }
+        .karmic-meter { height: 12px; background: #e2e8f0; border-radius: 10px; margin: 10px 0 25px; overflow: hidden; position: relative; }
+        .meter-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--accent-pink)); width: 0%; transition: width 2s ease-out; }
+        
+        .myth-inset {
+            background: rgba(255, 255, 255, 0.4);
+            border-left: 6px solid var(--gold);
+            padding: 2rem;
+            border-radius: 0 24px 24px 0;
+            margin: 2.5rem 0;
+            font-style: italic;
+            position: relative;
         }
+
+        .myth-inset::after { content: '"'; position: absolute; right: 20px; bottom: 0; font-size: 5rem; opacity: 0.05; }
+
+        .analysis-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 2rem; }
+        .data-point { background: white; padding: 2rem; border-radius: 24px; border: 1px solid rgba(0,0,0,0.03); }
+        .data-label { color: var(--gold); font-family: 'Cinzel', serif; font-size: 0.75rem; font-weight: 900; margin-bottom: 0.5rem; text-transform: uppercase; }
+
+        .lineage-map {
+            display: flex; justify-content: space-around; align-items: center;
+            padding: 3rem 1rem; background: rgba(255,255,255,0.2); border-radius: 30px; margin: 2rem 0;
+            text-align: center;
+        }
+        .ancestor-node { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
+        .node-circle { width: 50px; height: 50px; border: 2px solid var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; background: white; }
+
+        .chart-container { height: 400px; margin: 3rem 0; position: relative; }
+        
+        .sanskrit-remedy {
+            font-size: 1.1rem; color: var(--deep-purple); text-align: center;
+            padding: 2rem; border: 2px dashed var(--gold); border-radius: 20px; margin-top: 2rem;
+        }
+
+        .footer-note { text-align: center; padding: 4rem 1rem; color: #94a3b8; font-size: 0.85rem; }
+
+        /* Particles */
+        .particle { position: absolute; border-radius: 50%; pointer-events: none; opacity: 0.5; animation: rise 15s linear infinite; }
+        @keyframes rise { from { transform: translateY(100vh); opacity: 0; } to { transform: translateY(-10vh); opacity: 1; } }
     </style>
 </head>
 <body>
 
-    <div class="background-container" id="bg-container">
-        <div class="glow-sphere sphere-1"></div>
-        <div class="glow-sphere sphere-2"></div>
-        <div class="glow-sphere sphere-3"></div>
+    <div class="cosmic-void" id="void">
+        <div class="mandala-bg"></div>
     </div>
 
     <header>
-        <div class="logo">Divya-Data</div>
+        <div class="logo-container">
+            <span class="logo-main sanskrit">DIVYA-DATA</span><br>
+            <span style="font-size: 0.7rem; letter-spacing: 0.3rem; color: var(--gold); text-transform: uppercase;">Akashic Consciousness Engine</span>
+        </div>
     </header>
 
     <main>
-        <!-- Hero & Input -->
-        <section id="input-section">
-            <div class="hero-section">
-                <h1>AI Karmic Pattern Analyzer</h1>
-                <p class="subtitle">Decode your soul's blueprint and break cycles through celestial data analysis.</p>
-            </div>
-
-            <div class="glass-card">
-                <form id="karmic-form">
-                    <div class="form-group">
-                        <label>FULL NAME</label>
-                        <input type="text" id="user-name" placeholder="E.g. Selene Woods" required>
+        <!-- Portal Entrance -->
+        <section id="entrance">
+            <div class="glass-card" style="text-align: center;">
+                <h1 style="margin-bottom: 1.5rem;">The Soul Retrieval</h1>
+                <p style="margin-bottom: 3rem; color: #64748b;">A deep-dive analysis into your <i>Sanchita Karma</i>. We synthesize planetary alignments with mythological archetypes to map your spiritual evolution across time.</p>
+                
+                <form id="soul-form" style="text-align: left;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                        <div class="input-group">
+                            <label class="sanskrit" style="font-size: 0.8rem;">Earthly Name</label>
+                            <input type="text" id="user-name" required style="width: 100%; padding: 1.2rem; border-radius: 15px; border: 1px solid #ddd; margin-top: 0.5rem;">
+                        </div>
+                        <div class="input-group">
+                            <label class="sanskrit" style="font-size: 0.8rem;">Incarnation Date</label>
+                            <input type="date" id="user-date" required style="width: 100%; padding: 1.2rem; border-radius: 15px; border: 1px solid #ddd; margin-top: 0.5rem;">
+                        </div>
+                        <div class="input-group">
+                            <label class="sanskrit" style="font-size: 0.8rem;">Ascension Time</label>
+                            <input type="time" id="user-time" value="12:00" style="width: 100%; padding: 1.2rem; border-radius: 15px; border: 1px solid #ddd; margin-top: 0.5rem;">
+                        </div>
+                        <div class="input-group">
+                            <label class="sanskrit" style="font-size: 0.8rem;">Origin City</label>
+                            <input type="text" id="user-city" placeholder="Place of birth..." required style="width: 100%; padding: 1.2rem; border-radius: 15px; border: 1px solid #ddd; margin-top: 0.5rem;">
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>BIRTH DATE</label>
-                        <input type="date" id="birth-date" required>
-                    </div>
-                    <div class="form-group">
-                        <label>BIRTH TIME (Approximate)</label>
-                        <input type="time" id="birth-time" value="12:00">
-                    </div>
-                    <div class="form-group">
-                        <label>PLACE OF BIRTH</label>
-                        <input type="text" id="birth-place" placeholder="City, Country" required>
-                    </div>
-                    <button type="submit" class="btn-primary">ACTIVATE KARMIC SCAN</button>
+                    <button type="submit" class="btn-cta">CONSULT THE AKASHA</button>
                 </form>
             </div>
         </section>
 
-        <!-- Loading State -->
-        <section id="loading-overlay">
-            <div class="loader-circle"></div>
-            <h3>Mapping Your Past Incarnations...</h3>
-            <p class="subtitle" id="loading-text">Synchronizing Saturnian cycles...</p>
+        <!-- Loading Sequence -->
+        <section id="loading" style="display: none; text-align: center; padding: 6rem 0;">
+            <div style="font-size: 4rem; animation: spin 4s linear infinite;">☸</div>
+            <h2 class="sanskrit" style="margin-top: 2rem;">Reading Prarabdha Karma...</h2>
+            <p id="status-text" style="color: #94a3b8; margin-top: 1rem;">Scanning 12th House dimensions...</p>
         </section>
 
-        <!-- Result/Report Container -->
-        <section id="report-container">
-            <!-- Step 1: The Core Debt -->
-            <div class="report-step glass-card" id="step-1">
-                <span class="karmic-badge">SOUL ORIGIN</span>
-                <h2>South Node Influence</h2>
-                <p id="south-node-text" style="margin: 1rem 0; font-size: 1.1rem;"></p>
-                <div class="insight-item">
-                    <div class="insight-title">Your Master Habit</div>
-                    <p id="master-habit">Calculating your subconscious comfort zone...</p>
+        <!-- The Grand Report -->
+        <section id="report">
+            <!-- Phase 1: Summary -->
+            <div class="glass-card">
+                <span class="devanagari">विवरण</span>
+                <h2 class="sanskrit" style="font-size: 2.2rem; margin: 1rem 0;">Soul Signature</h2>
+                
+                <div class="analysis-grid">
+                    <div class="data-point">
+                        <div class="data-label">Dominant Nakshatra Energy</div>
+                        <h3 id="res-nakshatra" style="color: var(--deep-purple);">...</h3>
+                        <p id="res-nakshatra-desc" style="font-size: 0.9rem; margin-top: 1rem; color: #64748b;"></p>
+                    </div>
+                    <div class="data-point">
+                        <div class="data-label">Karmic Load Index</div>
+                        <div class="karmic-meter"><div class="meter-fill" id="load-meter"></div></div>
+                        <p style="font-size: 0.8rem; font-weight: bold; color: var(--gold);">Sanchita (Stored) vs Agami (Future)</p>
+                    </div>
                 </div>
             </div>
 
-            <!-- Step 2: Hidden Patterns -->
-            <div class="report-step glass-card" id="step-2">
-                <span class="karmic-badge">12TH HOUSE SHADOW</span>
-                <h2>Subconscious Programming</h2>
+            <!-- Phase 2: Past Life Residue (Ketu/South Node) -->
+            <div class="glass-card" style="background: linear-gradient(135deg, #fff, var(--soft-lilac));">
+                <span class="devanagari">केतु</span>
+                <h2 class="sanskrit" style="margin: 1rem 0;">The Shadow of Ketu</h2>
+                <p id="ketu-long-analysis" style="font-size: 1.1rem;"></p>
+                
+                <div class="myth-inset">
+                    <p id="ketu-mythology"></p>
+                </div>
+
+                <div class="analysis-grid">
+                    <div class="data-point">
+                        <div class="data-label">Soul Mastery</div>
+                        <p id="ketu-mastery"></p>
+                    </div>
+                    <div class="data-point">
+                        <div class="data-label">Unconscious Fear</div>
+                        <p id="ketu-fear"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phase 3: Elemental Tattva Chart -->
+            <div class="glass-card">
+                <span class="devanagari">पंचतत्त्व</span>
+                <h2 class="sanskrit" style="margin: 1rem 0;">Pancha Tattva Resonance</h2>
                 <div class="chart-container">
-                    <canvas id="balance-chart"></canvas>
+                    <canvas id="tattvaChart"></canvas>
                 </div>
-                <p id="house-12-text"></p>
+                <div class="analysis-grid" id="tattva-insights">
+                    <!-- Dynamic -->
+                </div>
             </div>
 
-            <!-- Step 3: The Saturnian Weight -->
-            <div class="report-step glass-card" id="step-3">
-                <span class="karmic-badge">SATURN'S DISCIPLINE</span>
-                <h2>Life Lesson Focus</h2>
-                <p id="saturn-lesson" style="font-style: italic; color: #64748b; font-size: 1.2rem; margin-bottom: 2rem;"></p>
-                <div class="insight-grid">
-                    <div class="insight-item">
-                        <div class="insight-title">The Challenge</div>
-                        <p id="saturn-challenge">...</p>
+            <!-- Phase 4: Ancestral Lineage Map -->
+            <div class="glass-card">
+                <span class="devanagari">पितृ दोष</span>
+                <h2 class="sanskrit" style="margin: 1rem 0;">Lineage & Pitru Karma</h2>
+                <p style="margin-bottom: 2rem;">We've analyzed the recurring patterns passed through your DNA. You are carrying a specific "Karmic Contract" from your paternal line.</p>
+                
+                <div class="lineage-map">
+                    <div class="ancestor-node">
+                        <div class="node-circle" style="border-color: #ddd;">7</div>
+                        <span style="font-size: 0.7rem;">Generation</span>
                     </div>
-                    <div class="insight-item">
-                        <div class="insight-title">The Reward</div>
-                        <p id="saturn-reward">...</p>
+                    <div style="color: #ddd;">➔</div>
+                    <div class="ancestor-node">
+                        <div class="node-circle">3</div>
+                        <span style="font-size: 0.7rem;">The Shift</span>
+                    </div>
+                    <div style="color: var(--gold);">➔</div>
+                    <div class="ancestor-node">
+                        <div class="node-circle" style="background: var(--gold); color: white; border: none;">YOU</div>
+                        <span style="font-size: 0.7rem; font-weight: bold;">Integration</span>
                     </div>
                 </div>
-            </div>
-
-            <!-- Step 4: Relationship Karma -->
-            <div class="report-step glass-card" id="step-4">
-                <span class="karmic-badge">RECURRING CYCLES</span>
-                <h2>Emotional & Relationship Karma</h2>
-                <div class="insight-item" style="border-left: 4px solid var(--accent-pink);">
-                    <p id="relationship-text">Scanning emotional attraction patterns based on Venus-Pluto resonance...</p>
+                
+                <div class="data-point" style="border-left: 4px solid var(--accent-pink);">
+                    <h4 class="sanskrit" style="margin-bottom: 0.5rem;">The Generational Burden</h4>
+                    <p id="lineage-analysis"></p>
                 </div>
             </div>
 
-            <!-- Step 5: Growth Phase -->
-            <div class="report-step glass-card" id="step-5" style="text-align: center; background: linear-gradient(180deg, rgba(255,255,255,0.6) 0%, rgba(224, 242, 254, 0.6) 100%);">
-                <span class="karmic-badge">SPIRITUAL ASCENSION</span>
-                <h2>Current Growth Phase</h2>
-                <div style="font-size: 4rem; margin: 1rem 0;">✨</div>
-                <h3 id="growth-title" style="color: var(--accent-purple); margin-bottom: 1rem;">The Integration</h3>
-                <p id="growth-description"></p>
-                <button class="btn-primary" style="max-width: 250px;" onclick="window.location.reload()">RE-SCAN ANOTHER SOUL</button>
+            <!-- Phase 5: Remedies & Closing -->
+            <div class="glass-card" style="text-align: center; background: var(--deep-purple); color: white; border: none;">
+                <h2 class="sanskrit" style="color: var(--gold);">Sacred Integration</h2>
+                <p style="margin: 2rem 0; opacity: 0.9;">To harmonize these patterns, the Akashic records suggest the following <i>Sadhana</i>:</p>
+                
+                <div class="sanskrit-remedy" style="background: rgba(255,255,255,0.1); border-color: var(--gold); color: white;">
+                    <p id="mantra-display" class="devanagari" style="font-size: 1.8rem; margin-bottom: 1rem;"></p>
+                    <p id="remedy-description" style="font-size: 1rem; font-style: italic;"></p>
+                </div>
+
+                <button class="btn-cta" style="background: var(--gold); color: var(--deep-purple); margin-top: 3rem;" onclick="location.reload()">RE-INITIATE JOURNEY</button>
             </div>
         </section>
     </main>
 
-    <footer>
-        <p>&copy; 2024 DIVYA-DATA. All insights generated via Cosmic Data Synthesis.</p>
-        <p style="margin-top: 0.5rem;"><span class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">Ascend to Top</span></p>
+    <footer class="footer-note">
+        <p>DIVYA-DATA © 2024 | Powered by High-Dimensional Astrological Synthesis.</p>
+        <p style="margin-top: 1rem; opacity: 0.5;">Disclaimer: Akashic readings are for spiritual exploration and personal contemplation.</p>
     </footer>
 
     <script>
-        // --- Particle Generation ---
-        const bgContainer = document.getElementById('bg-container');
-        for (let i = 0; i < 30; i++) {
-            const particle = document.createElement('div');
-            particle.className = 'particle';
-            particle.style.width = Math.random() * 5 + 'px';
-            particle.style.height = particle.style.width;
-            particle.style.left = Math.random() * 100 + 'vw';
-            particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
-            particle.style.animationDelay = (Math.random() * 10) + 's';
-            bgContainer.appendChild(particle);
+        // --- Particle System ---
+        function createParticles() {
+            const container = document.getElementById('void');
+            for(let i=0; i<50; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                const size = Math.random() * 4 + 2;
+                p.style.width = size + 'px';
+                p.style.height = size + 'px';
+                p.style.background = `rgba(212, 175, 55, ${Math.random() * 0.3})`;
+                p.style.left = Math.random() * 100 + 'vw';
+                p.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                p.style.animationDelay = (Math.random() * 5) + 's';
+                container.appendChild(p);
+            }
         }
+        createParticles();
 
-        // --- Data & Logic ---
-        const KARMIC_DATA = {
-            nodes: [
-                { sign: "Aries/Libra", text: "Your soul is learning to balance independence with partnership. In past lives, you gave too much of yourself away.", habit: "Over-compromising to avoid conflict." },
-                { sign: "Taurus/Scorpio", text: "You are shifting from material security to spiritual depth. You are learning that loss is just a transformation.", habit: "Hoarding resources or emotional safety." },
-                { sign: "Gemini/Sagittarius", text: "Focusing on facts rather than just broad theories. Your karma involves honest communication.", habit: "Restlessness and skipping details." },
-                { sign: "Cancer/Capricorn", text: "Learning to balance professional ambition with emotional vulnerability. You've been the 'cold provider' before.", habit: "Hiding emotions behind status." },
-                { sign: "Leo/Aquarius", text: "Moving from being just a face in the crowd to owning your unique creative power.", habit: "Seeking detached validation." },
-                { sign: "Virgo/Pisces", text: "Bringing order to chaos. Your soul is learning to be grounded while maintaining empathy.", habit: "Escapism and lack of boundaries." }
+        // --- Data Engine ---
+        const ENGINE = {
+            nakshatras: [
+                { name: "Ashwini (The Healer)", desc: "Quick-witted, innovative, and carrying the karma of the 'Initiator'. You were likely a traveler or physician in past cycles." },
+                { name: "Rohini (The Creator)", desc: "Deeply creative and magnetic. Your karma involves the proper use of beauty and abundance without attachment." },
+                { name: "Magha (The Ancestral)", desc: "Deeply connected to roots. You carry the weight of kingly or high-status responsibility from past lives." },
+                { name: "Chitra (The Architect)", desc: "The karma of the 'Master Builder'. You are here to restructure your world through precision and art." }
             ],
-            saturn: [
-                { house: "Identity", lesson: "The Karma of Self-Worth", challenge: "Feeling invisible or restricted by physical appearance.", reward: "Incredible self-mastery and resilience." },
-                { house: "Abundance", lesson: "The Karma of Value", challenge: "Financial fluctuations that force you to find internal value.", reward: "Total financial independence and wisdom." },
-                { house: "Connection", lesson: "The Karma of Expression", challenge: "Feeling misunderstood by siblings or peers.", reward: "Becoming a powerful, authoritative voice." },
-                { house: "Roots", lesson: "The Karma of Belonging", challenge: "Heaviness in the family line or home life.", reward: "Creating a sanctuary that heals generations." },
-                { house: "Creativity", lesson: "The Karma of Joy", challenge: "Difficulty in expressing playfulness or child-like wonder.", reward: "Legendary creative discipline and legacy." }
+            ketu: [
+                { 
+                    analysis: "Your Ketu falls in a Fire resonance. This suggests a past life defined by 'Kshatriya' (Warrior) energy. You were an enforcer of justice, perhaps too rigid in your beliefs.", 
+                    myth: "Like the myth of 'Kartikeya', you were born for battle. In this life, your soul is tired of conflict and seeks the cool waters of intuition.",
+                    mastery: "Unwavering focus and the ability to command respect without words.",
+                    fear: "Loss of control or being perceived as weak by those you love."
+                },
+                { 
+                    analysis: "Your Ketu falls in a Water resonance. You were a 'Brahmin' (Priest/Scholar) or a mystic who lived in seclusion. You carry high empathic sensitivity.",
+                    myth: "Reminiscent of the sage 'Dadhichi', you gave much of your essence for others. Now, you must learn to protect your own boundaries.",
+                    mastery: "Psychic depth and understanding the hidden emotions of others.",
+                    fear: "Being completely submerged or 'lost' in the emotional chaos of others."
+                }
             ],
-            growth: [
-                { phase: "The Shedding", desc: "You are currently in a cycle of releasing old versions of yourself. It feels like loss, but it is actually clearing space." },
-                { phase: "The Incubation", desc: "A quiet time. Your patterns are visible but not yet broken. Patience is your primary spiritual tool right now." },
-                { phase: "The Integration", desc: "You are successfully combining your past-life skills with your current purpose. Expect rapid manifestation." }
+            lineage: [
+                "Healing the 'Sacrifice Pattern': Your ancestors gave up their dreams for survival. You are the one chosen to manifest those deferred dreams.",
+                "Breaking 'Silent Grief': There is a pattern of unexpressed emotion in your maternal line. Your role is to find your voice.",
+                "Transforming 'Scarcity Mindset': Your lineage faced displacement. You are here to anchor wealth and permanence."
+            ],
+            remedies: [
+                { mantra: "ॐ शं शनैश्चराय नमः", text: "Chant Shani Beej Mantra 108 times on Saturdays to stabilize your material foundations." },
+                { mantra: "ॐ सोम सोमाय नमः", text: "Offer white flowers to a water body on full moon nights to heal emotional lineage karma." },
+                { mantra: "ॐ गं गणपतये नमः", text: "Start every Tuesday with Ganesha worship to remove the obstacles Ketu places in your path." }
             ]
         };
 
-        const form = document.getElementById('karmic-form');
-        const loadingOverlay = document.getElementById('loading-overlay');
-        const reportContainer = document.getElementById('report-container');
-        const loadingText = document.getElementById('loading-text');
-
-        form.addEventListener('submit', (e) => {
+        const form = document.getElementById('soul-form');
+        form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            startAnalysis();
+            document.getElementById('entrance').style.display = 'none';
+            document.getElementById('loading').style.display = 'block';
+
+            const statusText = document.getElementById('status-text');
+            const phases = ["Synchronizing with Saturn...", "Accessing Lineage Records...", "Calculating Tattva Balance...", "Decoding Nakshatra Resonance..."];
+            
+            for(let i=0; i<phases.length; i++) {
+                statusText.innerText = phases[i];
+                await new Promise(r => setTimeout(r, 1200));
+            }
+
+            renderReport();
         });
 
-        async function startAnalysis() {
-            // UI Transition
-            document.getElementById('input-section').style.display = 'none';
-            loadingOverlay.style.display = 'block';
+        function renderReport() {
+            const birth = new Date(document.getElementById('user-date').value);
+            const seed = (birth.getDate() + birth.getMonth() + (birth.getFullYear() % 10)) % 2;
+            const nSeed = (birth.getDate()) % 4;
 
-            const phrases = [
-                "Synchronizing Saturnian cycles...",
-                "Scanning 12th House resonances...",
-                "Calculating South Node trajectories...",
-                "Unveiling Akashic records..."
-            ];
-
-            let i = 0;
-            const interval = setInterval(() => {
-                loadingText.innerText = phrases[i % phrases.length];
-                i++;
-            }, 800);
-
-            // Mock processing time
-            await new Promise(r => setTimeout(r, 3500));
-            clearInterval(interval);
+            // Basic Data
+            const nakh = ENGINE.nakshatras[nSeed];
+            document.getElementById('res-nakshatra').innerText = nakh.name;
+            document.getElementById('res-nakshatra-desc').innerText = nakh.desc;
             
-            generateReport();
+            // Meter
+            setTimeout(() => {
+                document.getElementById('load-meter').style.width = (40 + (birth.getDate() * 1.5)) + "%";
+            }, 500);
+
+            // Ketu
+            const kt = ENGINE.ketu[seed];
+            document.getElementById('ketu-long-analysis').innerText = kt.analysis;
+            document.getElementById('ketu-mythology').innerText = kt.myth;
+            document.getElementById('ketu-mastery').innerText = kt.mastery;
+            document.getElementById('ketu-fear').innerText = kt.fear;
+
+            // Lineage
+            document.getElementById('lineage-analysis').innerText = ENGINE.lineage[seed % 3];
+
+            // Remedy
+            const rem = ENGINE.remedies[nSeed % 3];
+            document.getElementById('mantra-display').innerText = rem.mantra;
+            document.getElementById('remedy-description').innerText = rem.text;
+
+            // Chart
+            initTattvaChart(seed);
+
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('report').style.display = 'block';
         }
 
-        function generateReport() {
-            const birthDate = new Date(document.getElementById('birth-date').value);
-            const seed = birthDate.getDate() + birthDate.getMonth();
-            
-            // Deterministic selection based on birth date
-            const node = KARMIC_DATA.nodes[seed % KARMIC_DATA.nodes.length];
-            const saturn = KARMIC_DATA.saturn[seed % KARMIC_DATA.saturn.length];
-            const growth = KARMIC_DATA.growth[seed % KARMIC_DATA.growth.length];
-
-            // Fill Data
-            document.getElementById('south-node-text').innerText = node.text;
-            document.getElementById('master-habit').innerText = node.habit;
-            document.getElementById('saturn-lesson').innerText = `"${saturn.lesson}"`;
-            document.getElementById('saturn-challenge').innerText = saturn.challenge;
-            document.getElementById('saturn-reward').innerText = saturn.reward;
-            document.getElementById('growth-title').innerText = growth.phase;
-            document.getElementById('growth-description').innerText = growth.desc;
-            
-            // House 12 logic
-            const houses = ["Solitude", "Dreams", "Secrets", "Healing", "Ancestry"];
-            const houseVal = houses[seed % houses.length];
-            document.getElementById('house-12-text').innerText = `Your 12th house emphasizes ${houseVal}. Your subconscious is currently processing hidden fears regarding ${houseVal.toLowerCase()}, a pattern rooted at least three generations back.`;
-
-            // Relationship Karma
-            const relPatterns = [
-                "You attract 'Mirror Souls' who reflect your own insecurities until you learn to love yourself.",
-                "Your karma involves 'The Teacher'—partners who challenge your boundaries to make you stronger.",
-                "You are breaking a family cycle of emotional unavailability by learning radical honesty.",
-                "Your soul seeks 'Karmic Debtors'—people you feel you owe, even when you don't. Learn to balance the scales."
-            ];
-            document.getElementById('relationship-text').innerText = relPatterns[seed % relPatterns.length];
-
-            // Show Report
-            loadingOverlay.style.display = 'none';
-            reportContainer.style.display = 'block';
-
-            // Init Chart
-            initChart(seed);
-
-            // Scroll animations
-            observeSteps();
-        }
-
-        function initChart(seed) {
-            const ctx = document.getElementById('balance-chart').getContext('2d');
-            const data = {
-                labels: ['Fire (Will)', 'Earth (Body)', 'Air (Mind)', 'Water (Emotion)', 'Spirit (Soul)'],
-                datasets: [{
-                    label: 'Elemental Imbalance',
-                    data: [
-                        (seed * 7) % 100, 
-                        (seed * 3) % 100, 
-                        (seed * 9) % 100, 
-                        (seed * 2) % 100, 
-                        85
-                    ],
-                    backgroundColor: 'rgba(167, 139, 250, 0.2)',
-                    borderColor: 'rgba(167, 139, 250, 1)',
-                    pointBackgroundColor: 'rgba(244, 114, 182, 1)',
-                    borderWidth: 2
-                }]
-            };
+        function initTattvaChart(seed) {
+            const ctx = document.getElementById('tattvaChart').getContext('2d');
+            const elements = ["Prithvi (Earth)", "Jala (Water)", "Agni (Fire)", "Vayu (Air)", "Akasha (Ether)"];
+            const values = [60, 45, 80, 55, 95];
+            if(seed === 1) values.reverse();
 
             new Chart(ctx, {
                 type: 'radar',
-                data: data,
+                data: {
+                    labels: elements,
+                    datasets: [{
+                        label: 'Karmic Balance',
+                        data: values,
+                        backgroundColor: 'rgba(212, 175, 55, 0.2)',
+                        borderColor: 'rgba(212, 175, 55, 1)',
+                        pointBackgroundColor: 'rgba(76, 29, 149, 1)',
+                    }]
+                },
                 options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        r: {
-                            beginAtZero: true,
-                            max: 100,
-                            ticks: { display: false },
-                            grid: { color: 'rgba(0,0,0,0.05)' }
-                        }
-                    },
+                    scales: { r: { beginAtZero: true, max: 100, ticks: { display: false } } },
                     plugins: { legend: { display: false } }
                 }
             });
-        }
 
-        function observeSteps() {
-            const observerOptions = {
-                threshold: 0.2
-            };
-
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
-                });
-            }, observerOptions);
-
-            document.querySelectorAll('.report-step').forEach(step => {
-                observer.observe(step);
+            // Populate Tattva Insights
+            const container = document.getElementById('tattva-insights');
+            container.innerHTML = "";
+            elements.forEach((el, i) => {
+                const div = document.createElement('div');
+                div.className = "data-point";
+                div.innerHTML = `<div class="data-label">${el}</div><p style="font-size:0.8rem;">${values[i] > 70 ? 'High concentration: You naturally excel in this domain but must guard against excess.' : 'Latent energy: This area requires conscious cultivation this lifetime.'}</p>`;
+                container.appendChild(div);
             });
         }
     </script>
